@@ -48,13 +48,16 @@ def _verify_token(payload: dict) -> None:
         raise HTTPException(status_code=403, detail="Invalid Lark verification token")
 
 
-def _extract_text(message: dict) -> str:
+def _raw_text(message: dict) -> str:
     try:
         content = json.loads(message.get("content", "{}"))
     except json.JSONDecodeError:
         return ""
+    return str(content.get("text", "")).strip()
 
-    text = str(content.get("text", ""))
+
+def _extract_text(message: dict) -> str:
+    text = _raw_text(message)
     for mention in message.get("mentions") or []:
         key = mention.get("key")
         if key:
@@ -121,7 +124,7 @@ async def lark_events(request: Request, background_tasks: BackgroundTasks) -> di
         return {"code": 0}
 
     chat_type = message.get("chat_type", "")
-    text_starts_with_command = _extract_text(message).lower().startswith("/ai")
+    text_starts_with_command = _raw_text(message).lower().startswith("/ai")
     has_mentions = bool(message.get("mentions"))
     if (
         chat_type == "group"
