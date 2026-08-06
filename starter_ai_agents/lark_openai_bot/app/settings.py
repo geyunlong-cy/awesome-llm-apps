@@ -14,10 +14,14 @@ class Settings(BaseSettings):
 
     lark_app_id: str = Field(alias="LARK_APP_ID")
     lark_app_secret: str = Field(alias="LARK_APP_SECRET")
-    lark_verification_token: str = Field(alias="LARK_VERIFICATION_TOKEN")
+    lark_verification_token: str = Field(
+        default="",
+        alias="LARK_VERIFICATION_TOKEN",
+    )
+    lark_encrypt_key: str = Field(default="", alias="LARK_ENCRYPT_KEY")
 
     openai_api_key: str = Field(alias="OPENAI_API_KEY")
-    openai_model: str = Field(default="gpt-5.6", alias="OPENAI_MODEL")
+    openai_model: str = Field(default="gpt-5.6-terra", alias="OPENAI_MODEL")
 
     bot_name: str = Field(default="Leo AI", alias="BOT_NAME")
     require_mention_in_group: bool = Field(
