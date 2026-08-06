@@ -1,0 +1,1 @@
+"""Lark OpenAI bot application."""
